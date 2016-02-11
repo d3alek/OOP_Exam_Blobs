@@ -1,9 +1,7 @@
 ﻿namespace Blobs.Core.Factories
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
     using Interfaces;
+    using Blobs.Models.Behaviors;
 
     public class BehaviorFactory : IBehaviorFactory
     {
@@ -11,17 +9,14 @@
 
         public IBehavior Create(string behaviorName)
         {
-            var type = Assembly.GetExecutingAssembly().GetTypes()
-                .FirstOrDefault(t => t.Name == behaviorName);
-
-            if (type == null)
-            {
-                throw new ArgumentException(ExceptionMessage);
+            switch (behaviorName) {
+                case "Aggressive":
+                    return new Aggressive();
+                case "Inflated":
+                    return new Inflated();
+                default:
+                    throw new ArgumentException(ExceptionMessage);
             }
-
-            var behavior = Activator.CreateInstance(type);
-
-            return behavior as IBehavior;
         }
     }
 }
